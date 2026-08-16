@@ -13,8 +13,33 @@ std::int64_t ReadPrice() {
     return a.ticks;
 }
 
-std::int64_t ConvertPrice(double y) {
-    return me::price_from_dollars(y).ticks;
+me::Price ConvertPrice(double y) {
+    return me::price_from_dollars(y);
+}
+
+
+
+TEST(PriceTypeSuit, Operations) {
+
+    //Equal to ==
+    me::Price a {1234};
+    me::Price b {1234};
+    EXPECT_EQ(a == b, true);
+
+    me::Price x {1234};
+    me::Price y {1235};
+    EXPECT_EQ(x != y, true);
+
+
+    EXPECT_EQ(me::Price {1234} > me::Price {1233}, true);
+    EXPECT_EQ(me::Price {1234} < me::Price {1235}, true);
+
+    EXPECT_EQ(me::Price {1234} >=me::Price {1233}, true);
+    EXPECT_EQ(me::Price {1234} <=me::Price {1235}, true);
+    
+    EXPECT_EQ(me::Price {1234} >= me::Price {1234}, true);
+    EXPECT_EQ(me::Price {1234} <= me::Price {1234}, true);
+
 }
 
 
@@ -23,8 +48,7 @@ TEST(TypesSuite, Reads) {
     std::int64_t x {100};
     EXPECT_EQ(ReadPrice(), x);
 
-    std::int64_t y = 1234;
-    EXPECT_EQ(ConvertPrice(12.34), y);
+    EXPECT_EQ(ConvertPrice(12.34), me::Price{1234});
 }
 
 

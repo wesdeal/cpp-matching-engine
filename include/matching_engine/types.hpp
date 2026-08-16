@@ -38,4 +38,28 @@ namespace me {
     }
 
 
+
+
+    // Operator Overloading
+    
+    constexpr bool operator==(Price a, Price b) noexcept {
+        return (a.ticks == b.ticks);
+    }
+    constexpr bool operator!=(Price a, Price b) noexcept {
+        return (a.ticks != b.ticks);
+    }
+    constexpr bool operator>(Price a, Price b) noexcept {
+        return (a.ticks > b.ticks);
+    }
+    constexpr bool operator<(Price a, Price b) noexcept {
+        return (a.ticks < b.ticks);
+    }
+    constexpr bool operator>=(Price a, Price b) noexcept {
+        return (a.ticks >= b.ticks);
+    }
+    constexpr bool operator<=(Price a, Price b) noexcept {
+        return (a.ticks <= b.ticks);
+    }
+
+
 }
