@@ -18,13 +18,20 @@ Solution:
 #include <cmath>
 #include <iostream>
 
-constexpr std::int64_t kTicksPerDollar {100};
 
 namespace me {
-    constexpr std::int64_t kTicksPerDollar {100};
+    constexpr std::int64_t kTicksPerDollar {10000};
 
     struct Price {
         std::int64_t ticks{0}; // ticks for price. int64_t sets all ints to 64 bits
+
+
+        Price up(std::int64_t n) const noexcept {
+            return Price{ticks + n};
+        }
+        Price down(std::int64_t n) const noexcept {
+            return Price{ticks - n};
+        }
     };
 
     struct Quantity {
@@ -36,6 +43,8 @@ namespace me {
     inline Price price_from_dollars(double dollars) noexcept {
         return Price{std::llround(dollars * kTicksPerDollar)};
     }
+
+
 
 
 
@@ -60,6 +69,28 @@ namespace me {
     constexpr bool operator<=(Price a, Price b) noexcept {
         return (a.ticks <= b.ticks);
     }
+
+
+    // Quantity operators
+    constexpr bool operator==(Quantity a, Quantity b) noexcept {
+        return (a.shares == b.shares);
+    }
+    constexpr bool operator!=(Quantity a, Quantity b) noexcept {
+        return (a.shares != b.shares);
+    }
+    constexpr bool operator>(Quantity a, Quantity b) noexcept {
+        return (a.shares > b.shares);
+    }
+    constexpr bool operator<(Quantity a, Quantity b) noexcept {
+        return (a.shares < b.shares);
+    }
+    constexpr bool operator>=(Quantity a, Quantity b) noexcept {
+        return (a.shares >= b.shares);
+    }
+    constexpr bool operator<=(Quantity a, Quantity b) noexcept {
+        return (a.shares <= b.shares);
+    }
+
 
 
 }
