@@ -6,7 +6,7 @@ C++ doesnt handle floats well which is typically what prices are represented by 
 Solution:
     define our own type to handle prices and price arithmetic and operations
 
-    use ticks as main rep of price 1 tick is 1 cent. 
+    use ticks as main rep of price 1 tick is 1/100 cent. 
 
     $70 = 7000 (multiply by 100 to get our decimal places at the end
                 dollars only multi by 100; cents keep same)
@@ -25,11 +25,10 @@ namespace me {
     struct Price {
         std::int64_t ticks{0}; // ticks for price. int64_t sets all ints to 64 bits
 
-
-        Price up(std::int64_t n) const noexcept {
+        Price up(std::int64_t n) noexcept {
             return Price{ticks + n};
         }
-        Price down(std::int64_t n) const noexcept {
+        Price down(std::int64_t n) noexcept {
             return Price{ticks - n};
         }
     };
@@ -38,18 +37,20 @@ namespace me {
         std::int64_t shares{0};
     };
 
+    // nanoseconds since midnight; resets everyday. fine for this engine that processes one day of trades
+    struct Timestamp {
+        std::int64_t ns{0};
+    };
 
-
+    // bondary func for testing and functionality
     inline Price price_from_dollars(double dollars) noexcept {
         return Price{std::llround(dollars * kTicksPerDollar)};
     }
 
 
-
-
-
-
     // Operator Overloading
+
+    // Price operators
     
     constexpr bool operator==(Price a, Price b) noexcept {
         return (a.ticks == b.ticks);
@@ -72,6 +73,16 @@ namespace me {
 
 
     // Quantity operators
+
+    // arithmetic
+    constexpr me::Quantity operator+(Quantity a, Quantity b) noexcept {
+        return Quantity{a.shares + b.shares};   
+    }
+    constexpr me::Quantity operator-(Quantity a, Quantity b) noexcept {
+        return Quantity{a.shares - b.shares};   
+    }
+    
+
     constexpr bool operator==(Quantity a, Quantity b) noexcept {
         return (a.shares == b.shares);
     }
@@ -90,6 +101,10 @@ namespace me {
     constexpr bool operator<=(Quantity a, Quantity b) noexcept {
         return (a.shares <= b.shares);
     }
+
+
+    // TODO
+    // overload operator<< for Price Quantity and Order
 
 
 

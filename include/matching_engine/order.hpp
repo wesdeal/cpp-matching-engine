@@ -1,27 +1,28 @@
 #pragma once
 #include <matching_engine/types.hpp>
+#include <cstdint>
 
 // define an order
 
-enum class Side {
-    buy, sell
-};
+namespace me {
+    
+    enum class Side {
+        buy, sell
+    };
 
-class OrderId {
-    int value;
-
-    public:
-        OrderId(int v) : value(v){}
-
-        int get() const {
-            return value;
-        }
-};
+    struct OrderId {
+        std::uint64_t id{0};
+    };
 
 
-struct Order {
-    OrderId id;
-    me::Price price;
-    me::Quantity quantity;
-    Side side;
-};
+    struct Order {
+        OrderId id;
+        Price price;
+        Quantity quantity;
+        Side side;
+        Timestamp timestamp;
+    };
+
+
+}
+
