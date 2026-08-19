@@ -8,15 +8,15 @@ Solution:
 
     use ticks as main rep of price 1 tick is 1/100 cent. 
 
-    $70 = 7000 (multiply by 100 to get our decimal places at the end
-                dollars only multi by 100; cents keep same)
+    $70 = 70000 (multiply by 10000 to get our decimal places at the end)
 
 */
 #pragma once
 
 #include <cstdint>
-#include <cmath>
-#include <iostream>
+#include <iosfwd>   // forward-declares std::ostream only: enough to DECLARE
+                    // operator<<, without paying for all of <iostream> in
+                    // every file that includes this header.
 
 
 namespace me {
@@ -25,10 +25,10 @@ namespace me {
     struct Price {
         std::int64_t ticks{0}; // ticks for price. int64_t sets all ints to 64 bits
 
-        Price up(std::int64_t n) noexcept {
+        constexpr Price up(std::int64_t n) const noexcept {
             return Price{ticks + n};
         }
-        Price down(std::int64_t n) noexcept {
+        constexpr Price down(std::int64_t n) const noexcept {
             return Price{ticks - n};
         }
     };
@@ -42,10 +42,11 @@ namespace me {
         std::int64_t ns{0};
     };
 
-    // bondary func for testing and functionality
-    inline Price price_from_dollars(double dollars) noexcept {
-        return Price{std::llround(dollars * kTicksPerDollar)};
-    }
+    // boundary func for testing and functionality.
+    // Defined in src/types.cpp: it is not constexpr and never runs on the hot
+    // path, so it does not need to be visible to every translation unit.
+    // Keeping it out here also keeps <cmath> out of this header.
+    Price price_from_dollars(double dollars) noexcept;
 
 
     // Operator Overloading
@@ -104,8 +105,12 @@ namespace me {
 
 
     // TODO
-    // overload operator<< for Price Quantity and Order
+    // overload operator<< for Price Quantity
 
+    //Price
+    std::ostream& operator<<(std::ostream& os, const me::Price& p);
 
+    //Quantity
+    std::ostream& operator<<(std::ostream& os, const me::Quantity& q);
 
 }

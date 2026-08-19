@@ -17,7 +17,9 @@ me::Price ConvertPrice(double y) {
     return me::price_from_dollars(y);
 }
 
-
+TEST(SizesSuite, SizeOf) {
+    EXPECT_TRUE(sizeof(me::Order) == 40);
+}
 
 TEST(OrderSuite, ConstructingOrder) {
     me::Order order {me::OrderId{98765}, me::Price{678900}, me::Quantity{5}, me::Side::buy, me::Timestamp{1000}};
@@ -25,7 +27,7 @@ TEST(OrderSuite, ConstructingOrder) {
     EXPECT_EQ(order.price.ticks, 678900);
     EXPECT_EQ(order.quantity.shares, 5);
     EXPECT_EQ(order.side, me::Side::buy);
-    EXPECT_EQ(order.timestamp.ns, 1000);
+    EXPECT_EQ(order.timestamp.ns, 1000);    
 }
 
 TEST(PriceTypeSuite, Operations) {
